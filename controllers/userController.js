@@ -7,13 +7,25 @@ const { validationResult } = require('express-validator');
 
 exports.getAll = async (req, res) => {
   const users = await User.find().populate('assignedRoutes');
-  res.json(users);
+  // Fetch all roles once for efficiency
+  const roles = await Role.find();
+  const roleMap = Object.fromEntries(roles.map(r => [r.roleLevel, r.name]));
+  const usersWithRole = users.map(u => {
+    const obj = u.toObject();
+    obj.role = roleMap[u.roleLevel] || null;
+    return obj;
+  });
+  res.json(usersWithRole);
 };
 
 exports.getOne = async (req, res) => {
   const user = await User.findById(req.params.id).populate('assignedRoutes');
   if (!user) return res.status(404).json({ message: 'User not found' });
-  res.json(user);
+  // Fetch the role name
+  const role = await Role.findOne({ roleLevel: user.roleLevel });
+  const userObj = user.toObject();
+  userObj.role = role ? role.name : null;
+  res.json(userObj);
 };
 
 exports.create = async (req, res) => {

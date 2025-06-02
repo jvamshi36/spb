@@ -26,6 +26,7 @@ exports.login = async (req, res) => {
         name: user.name,
         email: user.email,
         roleLevel: user.roleLevel,
+        role: role ? role.name : null,
         assignedRoutes: user.assignedRoutes,
         permissions: role ? role.permissions : {},
         allowanceRates: role ? role.allowanceRates : {}
