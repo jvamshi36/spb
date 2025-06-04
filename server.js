@@ -23,6 +23,7 @@ app.use(cors({
     const allowedOrigins = [
       'http://localhost:3000',
       'http://localhost:8081',
+      'https://ethical-frontend.netlify.app'
       // Add your deployed frontend URLs here if needed
       // 'https://your-frontend-domain.com'
     ];
